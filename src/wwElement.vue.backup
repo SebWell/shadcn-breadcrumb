@@ -13,7 +13,7 @@
           <!-- Link Item -->
           <component
             v-if="item.href && !item.isCurrentPage"
-            :is="linkComponent || 'a'"
+            :is="content.linkComponent || 'a'"
             :href="item.href"
             :to="item.to"
             :class="breadcrumbLinkClasses"
@@ -60,7 +60,7 @@
           role="presentation"
           aria-hidden="true"
         >
-          <component v-if="customSeparator" :is="customSeparator" />
+          <component v-if="content.customSeparator" :is="content.customSeparator" />
           <svg v-else class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="m9 18 6-6-6-6"/>
           </svg>
@@ -98,15 +98,15 @@ export default {
   emits: ['click'],
   setup(props, { emit }) {
     const visibleItems = computed(() => {
-      const items = props.items
-      const maxItems = props.maxItems
+      const items = props.content.items
+      const maxItems = props.content.maxItems
       
       if (!maxItems || items.length <= maxItems) {
         return items
       }
 
-      const beforeCollapse = props.itemsBeforeCollapse
-      const afterCollapse = props.itemsAfterCollapse
+      const beforeCollapse = props.content.itemsBeforeCollapse
+      const afterCollapse = props.content.itemsAfterCollapse
       
       const startItems = items.slice(0, beforeCollapse)
       const endItems = items.slice(-afterCollapse)
@@ -119,7 +119,7 @@ export default {
     })
 
     const breadcrumbClasses = computed(() => cn(
-      props.customClasses
+      props.content.customClasses
     ))
 
     const breadcrumbListClasses = computed(() => cn(
@@ -150,8 +150,8 @@ export default {
       emit('click', { item, index })
       
       // Execute Weweb workflow if defined
-      if (props.clickWorkflowId && typeof wwLib !== 'undefined') {
-        wwLib.executeWorkflow(props.clickWorkflowId)
+      if (props.content.clickWorkflowId && typeof wwLib !== 'undefined') {
+        wwLib.executeWorkflow(props.content.clickWorkflowId)
       }
     }
 
